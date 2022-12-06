@@ -9,13 +9,12 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MemberServiceTest {
-    MemoryMemberRepository memberRepository;
-    MemberService memberService;
+    MemoryMemberRepository memberRepository = new MemoryMemberRepository();
+    MemberService memberService = new MemberService(memberRepository);
 
     @AfterEach
-    public void afterEach() {
-        memberRepository = new MemoryMemberRepository();
-        memberService = new MemberService(memberRepository);
+    public void beforeEach() {
+        memberRepository.clearStore();
     }
 
     @Test
@@ -38,9 +37,12 @@ class MemberServiceTest {
         // given
         Member member1 = new Member();
         member1.setName("spring");
+        member1.setId(0L);
 
         Member member2 = new Member();
         member2.setName("spring");
+        member1.setId(1L);
+
 
         // when
         memberService.join(member1);
