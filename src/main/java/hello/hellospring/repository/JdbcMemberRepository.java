@@ -10,8 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class 경 implements MemberRepository{
-
+public class JdbcMemberRepository implements MemberRepository {
     // dataSource.getConnection(); // database 와 연결된 socket 을 얻을 수 있음, 여기에 sql 날리면 됨
 
     // DB에 접근하려면 data source 가 필요
@@ -24,33 +23,33 @@ public class 경 implements MemberRepository{
 
     @Override
     public Member save(Member member) {
-       // 상수로 밖으로 빼는 것 추천
-       String sql = "insert into member(name) values(?)";
+        // 상수로 밖으로 빼는 것 추천
+        String sql = "insert into member(name) values(?)";
 
-       Connection conn = null;
-       PreparedStatement pstmt = null;
-       ResultSet rs = null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
 
-       try {
-           conn = getConnection();
-           pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
 
-           pstmt.setString(1, member.getName());
+            pstmt.setString(1, member.getName());
 
-           pstmt.executeUpdate();
-           rs = pstmt.getGeneratedKeys();
+            pstmt.executeUpdate();
+            rs = pstmt.getGeneratedKeys();
 
-           if (rs.next()) {
-               member.setId(rs.getLong(1));
-           } else {
-               throw new SQLException("id 조회 실패");
-           }
-           return member;
-       } catch (Exception e) {
-           throw new IllegalStateException(e);
-       } finally {
-           close(conn, pstmt, rs); // connection 이 계속 쌓이면 장애가 발생할 수 있으므로, 끊어주어야 함
-       }
+            if (rs.next()) {
+                member.setId(rs.getLong(1));
+            } else {
+                throw new SQLException("id 조회 실패");
+            }
+            return member;
+        } catch (Exception e) {
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs); // connection 이 계속 쌓이면 장애가 발생할 수 있으므로, 끊어주어야 함
+        }
     }
 
     @Override
