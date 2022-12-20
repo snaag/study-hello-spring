@@ -1,5 +1,6 @@
 package hello.hellospring;
 
+import hello.hellospring.aop.TimeTraceAop;
 import hello.hellospring.repository.*;
 import hello.hellospring.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,4 +25,11 @@ public class SpringConfig {
     public MemberService memberService() {
         return new MemberService(memberRepository);
     }
+
+    // aop 는 service, repository 처럼 정형화된게 아니기 때문에,
+    // 이렇게 적어주면 (컴포넌트 스캔 대신), 다른 개발자가 봤을 때, '아 aop 쓰는구나' 하고 알 수 있음
+//    @Bean
+//    public TimeTraceAop timeTraceAop() {
+//        return new TimeTraceAop();
+//    }
 }
