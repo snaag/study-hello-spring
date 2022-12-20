@@ -19,7 +19,6 @@ class MemberServiceIntegrationTest {
     @Autowired MemberService memberService;
 
     @Test
-    @Commit
     void 회원가입() {
         // given
         Member member = new Member();
